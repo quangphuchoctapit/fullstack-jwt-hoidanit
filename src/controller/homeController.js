@@ -1,11 +1,5 @@
 import mysql from 'mysql2'
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'jwt-hoidanit'
-})
+import userService from '../service/userService'
 
 
 const handleHome = (req, res) => {
@@ -18,16 +12,14 @@ const handleUserPage = (req, res) => {
 }
 
 const handleCreateNewUser = (req, res) => {
-    let username = req.body.username
-    let email = req.body.email
-    let password = req.body.password
-    connection.query(`INSERT INTO users (username, email, password) values(?, ?, ?)`, [username, email, password], function (err, results, fields) {
-        if (err) {
-            console.log(err)
-        }
-    })
 
-    return res.send("ok")
+    let data = userService.createNewUser(req.body)
+    userService.getUserList()
+    return res.status(200).json(data)
+}
+
+const getUserList = (req, res) => {
+
 }
 
 module.exports = {
