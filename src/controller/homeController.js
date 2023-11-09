@@ -7,14 +7,16 @@ const handleHome = (req, res) => {
     return res.render('home.ejs', { name })
 }
 
-const handleUserPage = (req, res) => {
-    return res.render('user.ejs')
+const handleUserPage = async (req, res) => {
+    let userList = await userService.getUserList()
+    return res.render('user.ejs', { userList })
 }
 
-const handleCreateNewUser = (req, res) => {
+const handleCreateNewUser = async (req, res) => {
 
     let data = userService.createNewUser(req.body)
-    userService.getUserList()
+    let listUsers = await userService.getUserList()
+    console.log('cheks list user: ', listUsers)
     return res.status(200).json(data)
 }
 
