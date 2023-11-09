@@ -51,7 +51,6 @@ const getUserList = async () => {
     let users = []
     try {
         const [rows, fields] = await connection.execute('SELECT * FROM users')
-        console.log('chek rows: ', rows)
         users = rows
         return users
     } catch (e) {
@@ -74,6 +73,42 @@ const deleteUser = async (id) => {
     }
 }
 
+const getUserById = async (id) => {
+    const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'jwt-hoidanit',
+        Promise: bluebird
+    })
+    try {
+        const [rows, fields] = await connection.execute('select * from users where id = ?', [id])
+        return rows
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const updateUserInfo = async (email, username, userid) => {
+    let id = userid
+    if (!userid) {
+        console.log('missing id')
+    }
+    const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'jwt-hoidanit',
+        Promise: bluebird
+    })
+    try {
+        const [rows, fields] = await connection.execute('update users set email = ?, username = ? where id = ?', [email, username, id])
+        return rows
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 module.exports = {
-    createNewUser, getUserList, deleteUser
+    createNewUser, getUserList, deleteUser, getUserById, updateUserInfo
 }
