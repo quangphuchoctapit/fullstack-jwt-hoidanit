@@ -35,72 +35,92 @@ const createNewUser = async (data) => {
 }
 
 const getUserList = async () => {
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'jwt-hoidanit',
-        Promise: bluebird
-    })
-    let user = []
-    try {
-        const [rows, fields] = await connection.execute('SELECT * FROM user')
-        user = rows
-        return user
-    } catch (e) {
-        console.log(e)
-    }
+    let users = []
+    users = await db.User.findAll()
+    return users
+    // const connection = await mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     password: '',
+    //     database: 'jwt-hoidanit',
+    //     Promise: bluebird
+    // })
+    // let user = []
+    // try {
+    //     const [rows, fields] = await connection.execute('SELECT * FROM user')
+    //     user = rows
+    //     return user
+    // } catch (e) {
+    //     console.log(e)
+    // }
 }
 
 const deleteUser = async (id) => {
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'jwt-hoidanit',
-        Promise: bluebird
+    await db.User.destroy({
+        where: {
+            id: id
+        }
     })
-    try {
-        const [rows, fields] = await connection.execute('delete from user where id = ?', [id])
-    } catch (e) {
-        console.log(e)
-    }
+    // const connection = await mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     password: '',
+    //     database: 'jwt-hoidanit',
+    //     Promise: bluebird
+    // })
+    // try {
+    //     const [rows, fields] = await connection.execute('delete from user where id = ?', [id])
+    // } catch (e) {
+    //     console.log(e)
+    // }
 }
 
 const getUserById = async (id) => {
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'jwt-hoidanit',
-        Promise: bluebird
+    let user = {}
+    user = await db.User.findOne({
+        where: {
+            id: id
+        }
     })
-    try {
-        const [rows, fields] = await connection.execute('select * from user where id = ?', [id])
-        return rows
-    } catch (e) {
-        console.log(e)
-    }
+    return user.get({ plain: true })
+    // const connection = await mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     password: '',
+    //     database: 'jwt-hoidanit',
+    //     Promise: bluebird
+    // })
+    // try {
+    //     const [rows, fields] = await connection.execute('select * from user where id = ?', [id])
+    //     return rows
+    // } catch (e) {
+    //     console.log(e)
+    // }
 }
 
 const updateUserInfo = async (email, username, userid) => {
-    let id = userid
-    if (!userid) {
-        console.log('missing id')
-    }
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'jwt-hoidanit',
-        Promise: bluebird
+    await db.User.update({
+        email: email, username: username
+    }, {
+        where: { id: userid }
     })
-    try {
-        const [rows, fields] = await connection.execute('update user set email = ?, username = ? where id = ?', [email, username, id])
-        return rows
-    } catch (e) {
-        console.log(e)
-    }
+    // let id = userid
+    // if (!userid) {
+    //     console.log('missing id')
+    // }
+    // const connection = await mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     password: '',
+    //     database: 'jwt-hoidanit',
+    //     Promise: bluebird
+    // })
+    // try {
+    //     const [rows, fields] = await connection.execute('update user set email = ?, username = ? where id = ?', [email, username, id])
+    //     return rows
+    // } catch (e) {
+    //     console.log(e)
+    // }
 }
 
 module.exports = {

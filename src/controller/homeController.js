@@ -30,10 +30,12 @@ const handleGetUpdateUser = async (req, res) => {
 
         let id = req.params.id
         let user = await userService.getUserById(id)
-        if (user && user.length > 0) {
-            userData = user[0]
-        }
-        console.log('user: ', user)
+
+        userData = {}
+        userData = user
+        // if (user && user.length > 0) {
+        //     userData = user[0]
+        // }
         return res.render('updateUser.ejs', { userData })
     } catch (e) {
         console.log(e)
