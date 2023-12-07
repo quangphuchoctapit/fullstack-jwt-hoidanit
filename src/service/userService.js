@@ -27,11 +27,6 @@ const createNewUser = async (data) => {
     let email = data.email
     let password = data.password
     let hashPassword = handleHashPassword(password)
-    // connection.query(`INSERT INTO users (username, email, password) values(?, ?, ?)`, [username, email, hashPassword], function (err, results, fields) {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    // })
     try {
         const [rows, fields] = await connection.execute('INSERT INTO users (username, email, password) values(?, ?, ?)', [username, email, hashPassword])
     } catch (e) {
