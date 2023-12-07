@@ -28,7 +28,7 @@ const createNewUser = async (data) => {
     let password = data.password
     let hashPassword = handleHashPassword(password)
     try {
-        const [rows, fields] = await connection.execute('INSERT INTO users (username, email, password) values(?, ?, ?)', [username, email, hashPassword])
+        const [rows, fields] = await connection.execute('INSERT INTO user (username, email, password) values(?, ?, ?)', [username, email, hashPassword])
     } catch (e) {
         console.log(e)
     }
@@ -43,11 +43,11 @@ const getUserList = async () => {
         database: 'jwt-hoidanit',
         Promise: bluebird
     })
-    let users = []
+    let user = []
     try {
-        const [rows, fields] = await connection.execute('SELECT * FROM users')
-        users = rows
-        return users
+        const [rows, fields] = await connection.execute('SELECT * FROM user')
+        user = rows
+        return user
     } catch (e) {
         console.log(e)
     }
@@ -62,7 +62,7 @@ const deleteUser = async (id) => {
         Promise: bluebird
     })
     try {
-        const [rows, fields] = await connection.execute('delete from users where id = ?', [id])
+        const [rows, fields] = await connection.execute('delete from user where id = ?', [id])
     } catch (e) {
         console.log(e)
     }
@@ -77,7 +77,7 @@ const getUserById = async (id) => {
         Promise: bluebird
     })
     try {
-        const [rows, fields] = await connection.execute('select * from users where id = ?', [id])
+        const [rows, fields] = await connection.execute('select * from user where id = ?', [id])
         return rows
     } catch (e) {
         console.log(e)
@@ -97,7 +97,7 @@ const updateUserInfo = async (email, username, userid) => {
         Promise: bluebird
     })
     try {
-        const [rows, fields] = await connection.execute('update users set email = ?, username = ? where id = ?', [email, username, id])
+        const [rows, fields] = await connection.execute('update user set email = ?, username = ? where id = ?', [email, username, id])
         return rows
     } catch (e) {
         console.log(e)
