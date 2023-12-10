@@ -7,7 +7,7 @@ const router = express.Router()
 
 const initApiRoutes = app => {
     router.get('/api-test', apiController.testApi)
-    router.post('/register', apiController.register)
+    router.post('/register', apiController.handleRegister)
 
 
     return app.use('/api/v1/', router)
