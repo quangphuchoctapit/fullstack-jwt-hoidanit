@@ -73,6 +73,39 @@ const createNewUser = async (userData) => {
     }
 }
 
+const checkLogin = async (userData) => {
+    let checkEmailExist = await checkEmailExists(userData.phoneOrEmail)
+    if (!checkEmailExist) {
+        return {
+            EC: -1,
+            EM: 'Email not found'
+        }
+    }
+    let dataUser = {}
+    if (checkEmailExist) {
+        let user = await db.User.findOne({
+            where: { email: userData.phoneOrEmail }
+        })
+        if (user) {
+            dataUser = user
+        }
+        dataUser = {}
+    }
+    // let checkPhoneExist = await checkPhoneExists(userData.phoneOrEmail)
+    // if (!checkPhoneExist) {
+    //     return {
+    //         EC: -1,
+    //         EM: 'Phone number not found'
+    //     }
+    // }
+
+    return {
+        EC: 0,
+        EM: 'Login successfully',
+        dataUser: dataUser
+    }
+}
+
 module.exports = {
-    createNewUser
+    createNewUser, checkLogin
 }

@@ -34,6 +34,32 @@ const handleRegister = async (req, res) => {
     }
 }
 
+const handleLogin = async (req, res) => {
+    try {
+        if (!req.body.phoneOrEmail) {
+            return res.status(200).json({
+                EM: 'Missing usernameOrEMail in apiController',
+                EC: 2
+            })
+        }
+        if (!req.body.password) {
+            return res.status(200).json({
+                EM: 'Missing password in apiController',
+                EC: 2
+            })
+        }
+        let data = await loginRegisterService.checkLogin(req.body)
+        return res.status(200).json(data)
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            EM: 'Something went wrong in apiController',
+            EC: 1
+        })
+    }
+}
+
 module.exports = {
-    testApi, handleRegister
+    testApi, handleRegister,
+    handleLogin
 } 
