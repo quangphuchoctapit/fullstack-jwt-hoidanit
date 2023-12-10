@@ -5,6 +5,10 @@ const testApi = async (req, res) => {
     })
 }
 
+const register = async (req, res) => {
+    console.log('call me', req.body)
+}
+
 module.exports = {
-    testApi
+    testApi, register
 } 
