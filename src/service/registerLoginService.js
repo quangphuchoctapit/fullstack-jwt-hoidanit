@@ -1,11 +1,15 @@
 import db from '../models'
 import bcrypt from 'bcryptjs'
+import { Op } from 'sequelize'
 const salt = bcrypt.genSaltSync(10);
-
 
 let handleHashPassword = (password) => {
     let hashPassword = bcrypt.hashSync(password, salt)
     return hashPassword
+}
+
+const checkHashPassword = (inputPassword, hashPassword) => {
+    return bcrypt.compareSync(inputPassword, hashPassword)
 }
 
 const checkEmailExists = async (userEmail) => {
@@ -74,35 +78,36 @@ const createNewUser = async (userData) => {
 }
 
 const checkLogin = async (userData) => {
-    let checkEmailExist = await checkEmailExists(userData.phoneOrEmail)
-    if (!checkEmailExist) {
-        return {
-            EC: -1,
-            EM: 'Email not found'
-        }
-    }
-    let dataUser = {}
-    if (checkEmailExist) {
+    try {
         let user = await db.User.findOne({
-            where: { email: userData.phoneOrEmail }
+            where: {
+                [Op.or]: [
+                    { email: userData.phoneOrEmail },
+                    { phone: userData.phoneOrEmail }
+                ]
+            }
         })
         if (user) {
-            dataUser = user
+            let isCorrectPassword = checkHashPassword(userData.password, user.password)
+            if (isCorrectPassword === true) {
+                return {
+                    EM: 'ok! successful login',
+                    EC: 0,
+                    DT: user.get({ plain: true })
+                }
+            }
         }
-        dataUser = {}
-    }
-    // let checkPhoneExist = await checkPhoneExists(userData.phoneOrEmail)
-    // if (!checkPhoneExist) {
-    //     return {
-    //         EC: -1,
-    //         EM: 'Phone number not found'
-    //     }
-    // }
-
-    return {
-        EC: 0,
-        EM: 'Login successfully',
-        dataUser: dataUser
+        return {
+            EM: 'This email/phone or password is not found',
+            EC: 2,
+            DT: ''
+        }
+    } catch (e) {
+        console.log(e)
+        return {
+            EC: -2,
+            EM: 'Something wrong in registerLoginService'
+        }
     }
 }
 

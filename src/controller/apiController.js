@@ -49,7 +49,11 @@ const handleLogin = async (req, res) => {
             })
         }
         let data = await loginRegisterService.checkLogin(req.body)
-        return res.status(200).json(data)
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT
+        })
     } catch (e) {
         console.log(e)
         return res.status(200).json({
