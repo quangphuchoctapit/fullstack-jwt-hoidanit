@@ -34,7 +34,9 @@ const getAllUsersWithPagination = async (page, limit) => {
         let offset = (page - 1) * limit
         const { count, rows } = await db.User.findAndCountAll({
             offset: offset,
-            limit: limit
+            limit: limit,
+            attributes: ['id', 'username', 'email', 'phone', 'sex'],
+            include: { model: db.Group, attributes: ['name', 'description'] }
         })
         let totalPages = Math.ceil(count / limit)
         let data = {
@@ -92,11 +94,28 @@ const editUser = async (data) => {
     }
 }
 
-const deleteUser = async (id) => {
+const deleteAUser = async (id) => {
     try {
-        await db.User.delete({
+        if (!id) {
+            return {
+                EC: -3,
+                EM: 'Missing param'
+            }
+        }
+        let user = await db.User.findOne({
             where: { id: id }
         })
+        if (user) {
+            await user.destroy()
+            return {
+                EC: 0,
+                EM: 'Successfully deleted a user'
+            }
+        }
+        return {
+            EC: -2,
+            EM: 'Cannot delete a user'
+        }
     } catch (e) {
         console.log(e)
         return {
@@ -108,5 +127,5 @@ const deleteUser = async (id) => {
 }
 
 module.exports = {
-    getAllUsers, getAllUsersWithPagination, createNewUser, editUser, deleteUser
+    getAllUsers, getAllUsersWithPagination, createNewUser, editUser, deleteAUser
 }
