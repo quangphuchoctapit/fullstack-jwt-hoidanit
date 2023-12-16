@@ -35,7 +35,6 @@ const checkPhoneExists = async (userPhone) => {
 const createNewUser = async (userData) => {
     try {
         let isExistsEmail = await checkEmailExists(userData.email)
-        console.log('is existe email ', isExistsEmail)
         if (isExistsEmail) {
             return {
                 EM: 'This email already exists',
@@ -112,5 +111,7 @@ const checkLogin = async (userData) => {
 }
 
 module.exports = {
-    createNewUser, checkLogin
+    createNewUser, checkLogin, checkHashPassword,
+    checkEmailExists,
+    checkPhoneExists
 }
