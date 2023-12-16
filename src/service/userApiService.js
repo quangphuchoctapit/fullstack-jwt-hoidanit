@@ -116,14 +116,36 @@ const createNewUser = async (data) => {
 
 const editUser = async (data) => {
     try {
+        if (!data.address || !data.sex || !data.groupId || !data.username) {
+            return {
+                EC: -3,
+                EM: 'Missing params'
+            }
+        }
+        let { address, sex, groupId, username } = data
         let user = await db.User.findOne({
             where: {
                 id: data.id
             }
         })
         if (user) {
-            // found user
-            // user.save()
+            let editUser = user.update({
+                address, sex, groupId, username
+            })
+            if (editUser) {
+                return {
+                    EC: 0,
+                    EM: 'Successfully updated User data',
+                }
+            }
+            return {
+                EC: -4,
+                EM: 'Cannot edit User',
+            }
+        }
+        return {
+            EC: -2,
+            EM: 'Cannot edit user'
         }
     } catch (e) {
         console.log(e)

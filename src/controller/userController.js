@@ -48,7 +48,12 @@ const createFunc = async (req, res) => {
 
 const editFunc = async (req, res) => {
     try {
-
+        let editUser = await userApiService.editUser(req.body);
+        console.log('check body: ', req.body)
+        return res.status(200).json({
+            EC: editUser.EC,
+            EM: editUser.EM
+        })
     } catch (e) {
         console.log(e)
         return res.status(200).json({
