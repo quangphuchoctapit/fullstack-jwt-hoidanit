@@ -9,7 +9,9 @@ const handleHome = (req, res) => {
 
 const handleUserPage = async (req, res) => {
     let userList = await userService.getUserList()
-    await userService.deleteUser(5)
+    console.log('cookies: ', req.cookies)
+    console.log('signed cookies: ', req.signedCookies)
+
     return res.render('user.ejs', { userList })
 }
 
