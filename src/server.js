@@ -16,9 +16,9 @@ configViewEngine(app)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
-createJWT()
-let tokenDecoded = verifyToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidG9tbXkiLCJibGEiOiJibGEiLCJpYXQiOjE3MDI3ODY0MzN9.RYuC1AFh4rnDNLD5w6oMkmbasmm5WXhZ9a2yeoUhGBc')
-console.log('chec ktoekn: ', tokenDecoded)
+// createJWT()
+// let tokenDecoded = verifyToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidG9tbXkiLCJibGEiOiJibGEiLCJpYXQiOjE3MDI3ODY0MzN9.RYuC1AFh4rnDNLD5w6oMkmbasmm5WXhZ9a2yeoUhGBc')
+// console.log('chec ktoekn: ', tokenDecoded)
 initWebRoutes(app)
 initApiRoutes(app)
 
