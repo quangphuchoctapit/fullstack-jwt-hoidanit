@@ -15,16 +15,40 @@ const createJWT = (payload) => {
 
 const verifyToken = async (token) => {
     let key = process.env.JWT_SECRET
-    let data = null
+    let decoded = null
     try {
-        let decoded = jwt.verify(token, key)
-        data = decoded
+        decoded = await jwt.verify(token, key)
     } catch (e) {
         console.log(e)
     }
-    return data
+    return decoded
+}
+
+const checkUserJWT = async (req, res, next) => {
+    let cookies = req.cookies
+    if (cookies && cookies.jwt) {
+        let token = cookies.jwt
+        let decoded = await verifyToken(token)
+        console.log('check decoded: ', decoded)
+        if (decoded) {
+            next()
+        }
+        else {
+            return res.status(401).json({
+                EC: -2,
+                EM: 'Cannot authenticated user',
+                DT: ''
+            })
+        }
+    } else {
+        return res.status(401).json({
+            EC: -1,
+            EM: 'Cannot authenticated user',
+            DT: ''
+        })
+    }
 }
 
 module.exports = {
-    createJWT, verifyToken
+    createJWT, verifyToken, checkUserJWT
 }
