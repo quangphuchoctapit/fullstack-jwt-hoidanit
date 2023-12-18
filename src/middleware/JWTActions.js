@@ -29,8 +29,8 @@ const checkUserJWT = async (req, res, next) => {
     if (cookies && cookies.jwt) {
         let token = cookies.jwt
         let decoded = await verifyToken(token)
-        console.log('check decoded: ', decoded)
         if (decoded) {
+            req.user = decoded
             next()
         }
         else {
@@ -49,6 +49,37 @@ const checkUserJWT = async (req, res, next) => {
     }
 }
 
+const checkUserPermission = async (req, res, next) => {
+    if (req.user) {
+        let email = req.user.email
+        let roles = req.user.groupWithRoles.Roles
+        let currentPath = req.path
+        if (!roles && roles.length === 0) {
+            return res.status(403).json({
+                EC: -1,
+                EM: 'You do not have permission to access this resource',
+                DT: ''
+            })
+        }
+        let canAccess = roles.some((item) => item.url === currentPath)
+        if (canAccess) {
+            next()
+        } else {
+            return res.status(403).json({
+                EC: -1,
+                EM: 'You do not have permission to access this resource',
+                DT: ''
+            })
+        }
+    } else {
+        return res.status(401).json({
+            EC: -1,
+            EM: 'Cannot authenticated user',
+            DT: ''
+        })
+    }
+}
+
 module.exports = {
-    createJWT, verifyToken, checkUserJWT
+    createJWT, verifyToken, checkUserJWT, checkUserPermission
 }

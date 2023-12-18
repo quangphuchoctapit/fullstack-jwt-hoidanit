@@ -2,7 +2,7 @@ import express from 'express'
 import apiController from '../controller/apiController.js'
 import userController from '../controller/userController.js'
 import groupController from '../controller/groupController.js'
-import { checkUserJWT } from '../middleware/JWTActions.js'
+import { checkUserJWT, checkUserPermission } from '../middleware/JWTActions.js'
 
 
 const router = express.Router()
@@ -13,7 +13,7 @@ const initApiRoutes = app => {
     router.post('/register', apiController.handleRegister)
     router.post('/login', apiController.handleLogin)
 
-    router.get('/user/read', checkUserJWT, userController.readFunc)
+    router.get('/user/read', checkUserJWT, checkUserPermission, userController.readFunc)
     router.post('/user/create', userController.createFunc)
     router.put('/user/edit', userController.editFunc)
     router.delete('/user/delete', userController.deleteFunc)
