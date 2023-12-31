@@ -66,7 +66,9 @@ const handleLogin = async (req, res) => {
     }
 }
 
+
+
 module.exports = {
     testApi, handleRegister,
-    handleLogin
+    handleLogin,
 } 

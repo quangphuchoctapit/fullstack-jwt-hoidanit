@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 require('dotenv').config()
 
-const allowPath = ['/login', '/register']
+const allowPath = ['/login', '/register', '/']
 
 const createJWT = (payload) => {
     let key = process.env.JWT_SECRET
@@ -34,6 +34,7 @@ const checkUserJWT = async (req, res, next) => {
         let decoded = await verifyToken(token)
         if (decoded) {
             req.user = decoded
+            req.token = token
             next()
         }
         else {
@@ -53,7 +54,7 @@ const checkUserJWT = async (req, res, next) => {
 }
 
 const checkUserPermission = async (req, res, next) => {
-    if (allowPath.includes(req.path)) return next()
+    if (allowPath.includes(req.path) || req.path === '/account') return next()
 
     if (req.user) {
         let email = req.user.email
