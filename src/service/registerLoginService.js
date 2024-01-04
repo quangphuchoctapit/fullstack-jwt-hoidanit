@@ -97,7 +97,6 @@ const checkLogin = async (userData) => {
                 let payload = {
                     email: user.email,
                     groupWithRoles: groupWithRoles,
-                    expiresIn: process.env.JWT_EXPIRESIN,
                     username: user.username
                 }
                 let token = await createJWT(payload)
