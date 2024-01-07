@@ -90,7 +90,7 @@ const checkUserPermission = async (req, res, next) => {
             next()
         } else {
             return res.status(403).json({
-                EC: -1,
+                EC: -2,
                 EM: 'You do not have permission to access this resource',
                 DT: ''
             })

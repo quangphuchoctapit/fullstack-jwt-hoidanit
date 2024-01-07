@@ -7,7 +7,6 @@ const configCors = (app) => {
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
         res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization')
         res.setHeader('Access-Control-Allow-Credentials', true)
-        console.log('check :', req.method === 'OPTIONS')
         if (req.method === 'OPTIONS') {
             return res.sendStatus(200)
         }
