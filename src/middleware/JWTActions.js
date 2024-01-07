@@ -28,11 +28,26 @@ const verifyToken = async (token) => {
     return decoded
 }
 
+const extractToken = req => {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1]
+    }
+    // else if (req.query && req.query.token) {
+    //     return req.query.token
+    // }
+    return null
+}
+
 const checkUserJWT = async (req, res, next) => {
-    let cookies = req.cookies
     if (allowPath.includes(req.path)) return next()
-    if (cookies && cookies.jwt) {
-        let token = cookies.jwt
+
+    let cookies = req.cookies
+    const tokenFromHeader = extractToken(req)
+
+
+    if ((cookies && cookies.jwt) || tokenFromHeader) {
+        let token = cookies?.jwt ? cookies.jwt : tokenFromHeader
+        console.log('cookee: ', cookies)
         let decoded = await verifyToken(token)
         if (decoded) {
             req.user = decoded
@@ -46,7 +61,8 @@ const checkUserJWT = async (req, res, next) => {
                 DT: ''
             })
         }
-    } else {
+    }
+    else {
         return res.status(401).json({
             EC: -1,
             EM: 'Cannot authenticated user',
