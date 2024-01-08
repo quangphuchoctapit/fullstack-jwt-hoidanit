@@ -70,26 +70,23 @@ const deleteFunc = async (req, res) => {
     }
 }
 
-// const getUserAccount = async (req, res) => {
-//     try {
-//         return res.status(200).json({
-//             EM: 'ok',
-//             EC: 0,
-//             DT: {
-//                 access_token: req.token,
-//                 groupWithRoles: req.user.groupWithRoles,
-//                 email: req.user.email,
-//                 username: req.user.username
-//             }
-//         })
-//     } catch (e) {
-//         return res.status(200).json({
-//             EM: 'Something went wrong in apiController',
-//             EC: -1
-//         })
-//     }
-// }
+const getRoleByGroup = async (req, res) => {
+    try {
+        let id = req.params.groupId
+        let data = await roleApiService.getRoleByGroup(id)
+        return res.status(200).json({
+            EM: data.EM,
+            EC: 0,
+            DT: data.DT
+        })
+    } catch (e) {
+        return res.status(200).json({
+            EM: 'Something went wrong in apiController',
+            EC: -1
+        })
+    }
+}
 
 module.exports = {
-    createFunc, readFunc, deleteFunc, editFunc
+    createFunc, readFunc, deleteFunc, editFunc, getRoleByGroup
 }

@@ -85,7 +85,10 @@ const checkUserPermission = async (req, res, next) => {
                 DT: ''
             })
         }
-        let canAccess = roles.some((item) => item.url === currentPath)
+        let canAccess = roles.some((item) => item.url === currentPath || currentPath.includes(item.url))
+        let notAccess = roles.some((item) => item.url === currentPath)
+
+        console.log(req.path)
         if (canAccess) {
             next()
         } else {

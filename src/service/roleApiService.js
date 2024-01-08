@@ -90,6 +90,42 @@ const deleteARole = async (inputId) => {
     }
 }
 
+const getRoleByGroup = async (inputId) => {
+    try {
+        if (!inputId) {
+            return {
+                EM: 'Missing groupId',
+                EC: -2,
+                DT: []
+            }
+        }
+        let data = await db.Group.findOne({
+            where: { id: inputId },
+            include: [{ model: db.Role, attributes: ["id", "url", "description"], through: { attributes: [] } }]
+
+        })
+        if (!data) {
+            return {
+                EM: 'Cannot get role by group',
+                EC: -3,
+                DT: []
+            }
+        }
+        return {
+            EM: 'ok get role by group successfully',
+            EC: 0,
+            DT: data
+        }
+    } catch (e) {
+        console.log(e)
+        return {
+            EM: 'Something went wrong in roleApiService',
+            EC: -1,
+            DT: []
+        }
+    }
+}
+
 module.exports = {
-    createNewRole, getAllRoles, deleteARole
+    createNewRole, getAllRoles, deleteARole, getRoleByGroup
 }
