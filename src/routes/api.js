@@ -23,7 +23,7 @@ const initApiRoutes = app => {
 
 
     //user routes
-    router.get('/user/read', checkUserJWT, userController.readFunc)
+    router.get('/user/read', userController.readFunc)
     router.post('/user/create', userController.createFunc)
     router.put('/user/edit', userController.editFunc)
     router.delete('/user/delete', userController.deleteFunc)
@@ -34,7 +34,7 @@ const initApiRoutes = app => {
     router.put('/role/edit', roleController.editFunc)
     router.delete('/role/delete', roleController.deleteFunc)
     router.get('/role/by-group/:groupId', roleController.getRoleByGroup)
-
+    router.post('/role/assign-to-group', roleController.assignRoleToGroup)
 
     //group routes
     router.get('/group/read', groupController.readFunc)

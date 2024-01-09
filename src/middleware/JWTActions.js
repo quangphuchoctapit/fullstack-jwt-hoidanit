@@ -47,7 +47,6 @@ const checkUserJWT = async (req, res, next) => {
 
     if ((cookies && cookies.jwt) || tokenFromHeader) {
         let token = cookies?.jwt ? cookies.jwt : tokenFromHeader
-        console.log('cookee: ', cookies)
         let decoded = await verifyToken(token)
         if (decoded) {
             req.user = decoded
@@ -86,12 +85,14 @@ const checkUserPermission = async (req, res, next) => {
             })
         }
         let canAccess = roles.some((item) => item.url === currentPath || currentPath.includes(item.url))
-        let notAccess = roles.some((item) => item.url === currentPath)
+        // console.log('check cure path:', currentPath)
+        // console.log('check roles:', roles)
 
-        console.log(req.path)
-        if (canAccess) {
+
+        if (canAccess === true) {
             next()
         } else {
+            console.log('dell co lot vao ', canAccess === true)
             return res.status(403).json({
                 EC: -2,
                 EM: 'You do not have permission to access this resource',

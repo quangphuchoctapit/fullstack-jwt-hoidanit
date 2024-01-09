@@ -126,6 +126,37 @@ const getRoleByGroup = async (inputId) => {
     }
 }
 
+const assignRoleToGroup = async (inputData) => {
+    try {
+        console.log(inputData)
+        if (!inputData) {
+            return {
+                EM: 'Missing inputData',
+                EC: -2,
+                DT: []
+            }
+        }
+        await db.Group_Role.destroy(
+            {
+                where: { groupId: +inputData.groupId }
+            }
+        )
+        await db.Group_Role.bulkCreate(inputData.groupRoles)
+        return {
+            EM: 'ok assign role to group successfully',
+            EC: 0,
+            DT: ''
+        }
+    } catch (e) {
+        console.log(e)
+        return {
+            EM: 'Something went wrong in roleApiService',
+            EC: -1,
+            DT: []
+        }
+    }
+}
+
 module.exports = {
-    createNewRole, getAllRoles, deleteARole, getRoleByGroup
+    createNewRole, getAllRoles, deleteARole, getRoleByGroup, assignRoleToGroup
 }
